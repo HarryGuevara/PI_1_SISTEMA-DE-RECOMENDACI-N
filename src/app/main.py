@@ -6,7 +6,7 @@ import requests
 from io import StringIO
 
 # URL base de tu repositorio GitHub
-BASE_URL = "https://raw.githubusercontent.com/USUARIO/my_recommendation_project/main/data/CSV/"
+BASE_URL = "https://raw.githubusercontent.com/HarryGuevara/my_recommendation_project/main/data/CSV/"
 
 # Función para cargar los CSV desde GitHub
 def load_csv_from_github(filename: str) -> pd.DataFrame:
@@ -18,7 +18,7 @@ def load_csv_from_github(filename: str) -> pd.DataFrame:
 # Cargar los datos
 cast_df = load_csv_from_github('cast_desanidado.csv')
 crew_df = load_csv_from_github('crew_desanidado.csv')
-movie_df = load_csv_from_github('movies_with_genres.csv')
+movie_df = load_csv_from_github('movies_datasetc.csv')
 
 # Inicializar la aplicación FastAPI
 app = FastAPI()
