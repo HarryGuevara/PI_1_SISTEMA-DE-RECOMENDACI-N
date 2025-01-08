@@ -1,10 +1,24 @@
 import pandas as pd
 from fastapi import FastAPI
+from typing import Optional
+from pydantic import BaseModel
+import requests
+from io import StringIO
+
+# URL base de tu repositorio GitHub
+BASE_URL = "https://raw.githubusercontent.com/USUARIO/my_recommendation_project/main/data/CSV/"
+
+# Función para cargar los CSV desde GitHub
+def load_csv_from_github(filename: str) -> pd.DataFrame:
+    url = BASE_URL + filename
+    response = requests.get(url)
+    response.raise_for_status()  # Lanza un error si no se puede cargar el archivo
+    return pd.read_csv(StringIO(response.text))
 
 # Cargar los datos
-cast_df = pd.read_csv('data/processed/cast_cleaned.csv')
-crew_df = pd.read_csv('data/processed/crew_cleaned.csv')
-movie_df = pd.read_csv('data/processed/df_movie_progress (3).csv')
+cast_df = load_csv_from_github('cast_desanidado.csv')
+crew_df = load_csv_from_github('crew_desanidado.csv')
+movie_df = load_csv_from_github('movies_with_genres.csv')
 
 # Inicializar la aplicación FastAPI
 app = FastAPI()
