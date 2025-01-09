@@ -16,9 +16,9 @@ def load_csv_from_github(filename: str) -> pd.DataFrame:
     return pd.read_csv(StringIO(response.text))
 
 # Cargar los datos
-cast_df = load_csv_from_github('cast_desanidado.csv')
-crew_df = load_csv_from_github('crew_desanidado.csv')
-movie_df = load_csv_from_github('movies_datasetc.csv')
+cast_df = load_csv_from_github('cast_desanidado.csv', usecols=['actor_id', 'actor_name'])
+crew_df = load_csv_from_github('crew_desanidado.csv', usecols=['crew_id', 'job'])
+movie_df = load_csv_from_github('movies_datasetc.csv', usecols=['movie_id', 'genre'])
 
 # Inicializar la aplicación FastAPI
 app = FastAPI()
