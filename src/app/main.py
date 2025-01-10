@@ -8,17 +8,43 @@ from io import StringIO
 # URL base de tu repositorio GitHub
 BASE_URL = "https://raw.githubusercontent.com/HarryGuevara/my_recommendation_project/main/data/CSV/"
 
-# Función para cargar los CSV desde GitHub
-def load_csv_from_github(filename: str) -> pd.DataFrame:
+# Función para cargar los CSV desde GitHub con optimización de memoria
+def load_csv_from_github(filename: str, usecols=None, sample_frac=1.0) -> pd.DataFrame:
     url = BASE_URL + filename
     response = requests.get(url)
     response.raise_for_status()  # Lanza un error si no se puede cargar el archivo
-    return pd.read_csv(StringIO(response.text))
+    csv_data = StringIO(response.text)
+    df = pd.read_csv(csv_data, usecols=usecols)
+    if sample_frac < 1.0:  # Reducir filas si se especifica
+        df = df.sample(frac=sample_frac, random_state=42)
+    return df
 
-# Cargar los datos
-cast_df = load_csv_from_github('cast_desanidado.csv')
-crew_df = load_csv_from_github('crew_desanidado.csv')
-movie_df = load_csv_from_github('movies_datasetc.csv')
+# Cargar los datos con optimización
+cast_df = load_csv_from_github(
+    'cast_desanidado.csv', 
+    usecols=['actor_id', 'actor_name', 'movie_id'], 
+    sample_frac=0.5  # Carga el 50% de los datos para optimizar
+)
+crew_df = load_csv_from_github(
+    'crew_desanidado.csv', 
+    usecols=['crew_id', 'job', 'movie_id', 'director_name'], 
+    sample_frac=0.5
+)
+movie_df = load_csv_from_github(
+    'movies_datasetc.csv', 
+    usecols=['id', 'title', 'release_date', 'vote_average', 'vote_count', 'revenue', 'budget', 'genre'], 
+    sample_frac=0.5
+)
+
+# Optimizar tipos de datos
+cast_df['actor_id'] = cast_df['actor_id'].astype('int32')
+cast_df['movie_id'] = cast_df['movie_id'].astype('int32')
+crew_df['crew_id'] = crew_df['crew_id'].astype('int32')
+crew_df['movie_id'] = crew_df['movie_id'].astype('int32')
+movie_df['id'] = movie_df['id'].astype('int32')
+movie_df['vote_count'] = movie_df['vote_count'].astype('int32')
+movie_df['revenue'] = movie_df['revenue'].astype('float32')
+movie_df['budget'] = movie_df['budget'].astype('float32')
 
 # Inicializar la aplicación FastAPI
 app = FastAPI()
