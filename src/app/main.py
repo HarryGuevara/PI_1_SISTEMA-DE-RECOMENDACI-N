@@ -36,15 +36,6 @@ movie_df = load_csv_from_github(
     sample_frac=0.5
 )
 
-# Optimizar tipos de datos
-cast_df['actor_id'] = cast_df['actor_id'].astype('int32')
-cast_df['movie_id'] = cast_df['movie_id'].astype('int32')
-crew_df['crew_id'] = crew_df['crew_id'].astype('int32')
-crew_df['movie_id'] = crew_df['movie_id'].astype('int32')
-movie_df['id'] = movie_df['id'].astype('int32')
-movie_df['vote_count'] = movie_df['vote_count'].astype('int32')
-movie_df['revenue'] = movie_df['revenue'].astype('float32')
-movie_df['budget'] = movie_df['budget'].astype('float32')
 
 # Inicializar la aplicación FastAPI
 app = FastAPI()
