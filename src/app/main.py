@@ -38,7 +38,7 @@ try:
     )
     movie_df = load_csv_from_github(
         'movies_datasetc.csv',
-        usecols=['movie_id', 'title', 'release_date', 'vote_average', 'vote_count', 'revenue', 'budget', 'genre'],
+        usecols=['movie_id', 'title', 'release_date', 'vote_average', 'vote_count', 'revenue', 'budget'],
         sample_frac=0.5
     )
 except RuntimeError as e:
